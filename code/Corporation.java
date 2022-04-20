@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 public class Corporation extends Entity {
     private String name;
     private Image image;
+    private State state;
     public Corporation(double x, double y, String name) {
         super(x, y);
         this.name = name;
@@ -15,6 +16,7 @@ public class Corporation extends Entity {
         catch(Exception e) {
             e.printStackTrace();
         }
+        this.state = new Shake();
     }
 
     @Override
