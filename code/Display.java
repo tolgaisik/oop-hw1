@@ -24,7 +24,7 @@ public class Display extends JPanel {
         g.drawLine(0, Common.getHorizontalLineY(), Common.getWindowWidth(), Common.getHorizontalLineY());
 
         // TODO: draw other entities
-        // draw countries
         Common.getCountries().forEach(country -> country.draw((Graphics2D) g));
+        Common.getCorporations().forEach(corporation -> corporation.draw((Graphics2D) g));
     }
 }

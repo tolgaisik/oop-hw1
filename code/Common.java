@@ -18,16 +18,19 @@ public class Common {
     private static final LivePrice electronicsPrice = new LivePrice(580, 65, "Consumer Electronics", 30, 2, 10, 50);
     private static final LivePrice goldPrice = new LivePrice(1300, 65, "Gold", 75, 3, 50, 100);
     private static final List<Country> countries = Arrays.asList(
-            new Country(100, 100, "poland"),
-            new Country(100, 300, "chile"),
-            new Country(100, 500, "malaysia"),
-            new Country(100, 700, "mexico"),
-            new Country(100, 900, "nigeria"));
-
-    enum Countries {
-        POLAND,
-    };
-
+            new Country((int)(windowWidth/6)   - 75, 600, "poland"),
+            new Country((int)(windowWidth/6)*2 - 75, 600, "chile"),
+            new Country((int)(windowWidth/6)*3 - 75, 600, "malaysia"),
+            new Country((int)(windowWidth/6)*4 - 75, 600, "mexico"),
+            new Country((int)(windowWidth/6)*5 - 75, 600, "nigeria")
+        );
+    private static final List<Corporation> corporations = Arrays.asList(
+        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "boeing"),
+        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "general_dynamics"),
+        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "lockheed_martin"),
+        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "northrop_grumman"),
+        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "raytheon")
+    ); 
     // getters
     public static String getTitle() {
         return title;
@@ -76,7 +79,9 @@ public class Common {
     public static List<Country> getCountries() {
         return countries;
     }
-
+    public static List<Corporation> getCorporations() {
+        return corporations;
+    }
     static {
 
     }
