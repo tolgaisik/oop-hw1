@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -18,19 +17,23 @@ public class Common {
     private static final LivePrice electronicsPrice = new LivePrice(580, 65, "Consumer Electronics", 30, 2, 10, 50);
     private static final LivePrice goldPrice = new LivePrice(1300, 65, "Gold", 75, 3, 50, 100);
     private static final List<Country> countries = Arrays.asList(
-            new Country((int)(windowWidth/6)   - 75, 600, "poland"),
-            new Country((int)(windowWidth/6)*2 - 75, 600, "chile"),
-            new Country((int)(windowWidth/6)*3 - 75, 600, "malaysia"),
-            new Country((int)(windowWidth/6)*4 - 75, 600, "mexico"),
-            new Country((int)(windowWidth/6)*5 - 75, 600, "nigeria")
-        );
+            new Country((int) (windowWidth / 6) - 75, 600, "poland"),
+            new Country((int) (windowWidth / 6) * 2 - 75, 600, "chile"),
+            new Country((int) (windowWidth / 6) * 3 - 75, 600, "malaysia"),
+            new Country((int) (windowWidth / 6) * 4 - 75, 600, "mexico"),
+            new Country((int) (windowWidth / 6) * 5 - 75, 600, "nigeria"));
     private static final List<Corporation> corporations = Arrays.asList(
-        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "boeing"),
-        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "general_dynamics"),
-        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "lockheed_martin"),
-        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "northrop_grumman"),
-        new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(windowHeight), "raytheon")
-    ); 
+            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
+                    "boeing"),
+            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
+                    "general_dynamics"),
+            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
+                    "lockheed_martin"),
+            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
+                    "northrop_grumman"),
+            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
+                    "raytheon"));
+
     // getters
     public static String getTitle() {
         return title;
@@ -79,9 +82,25 @@ public class Common {
     public static List<Country> getCountries() {
         return countries;
     }
+
     public static List<Corporation> getCorporations() {
         return corporations;
     }
+
+    public static State generateRandomState() {
+        int type = randomGenerator.nextInt(4);
+        switch (type) {
+            case 0:
+                return new Shake();
+            case 1:
+                return new GotoXY();
+            case 2:
+                return new Rest();
+            default:
+                return new ChaseClosest();
+        }
+    }
+
     static {
 
     }
@@ -93,7 +112,9 @@ public class Common {
             electronicsPrice.step();
         if (randomGenerator.nextInt(400) == 0)
             goldPrice.step();
-
+        corporations.forEach(Corporation::step);
+        if (randomGenerator.nextInt(50) == 0)
+            corporations.forEach(Corporation::update);
         // TODO: call other entities' step()
     }
 }
