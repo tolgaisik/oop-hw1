@@ -87,20 +87,6 @@ public class Common {
         return corporations;
     }
 
-    public static State generateRandomState() {
-        int type = randomGenerator.nextInt(4);
-        switch (type) {
-            case 0:
-                return new Shake();
-            case 1:
-                return new GotoXY();
-            case 2:
-                return new Rest();
-            default:
-                return new ChaseClosest();
-        }
-    }
-
     static {
 
     }
