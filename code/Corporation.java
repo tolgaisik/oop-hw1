@@ -20,11 +20,12 @@ public class Corporation extends Entity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.state = generateRandomState();
+        this.state = Common.generateRandomState();
     }
 
     @Override
     public void draw(Graphics2D g) {
+        // draw corporate image
         if (this.image != null) {
             g.drawImage(this.image, (int) position.getX(),
                     (int) position.getY(), null);
@@ -33,35 +34,39 @@ public class Corporation extends Entity {
         g.drawString(this.state.getState(), (int) position.getX() + 15, (int) position.getY() + 120);
     }
 
+    /**
+     * calculates the position based on the type of current state object
+     * 
+     * @see State#next(Entity)
+     * @params none
+     */
     @Override
     public void step() {
-        Position p = this.state.getNextPosition(this);
+        Position p = this.state.next(this);
         this.position.setX(p.getX());
         this.position.setY(p.getY());
     }
 
-    public static State generateRandomState() {
-        int type = new Random().nextInt(4);
-        switch (type) {
-            case 0:
-                return new Shake();
-            case 1:
-                return new GotoXY();
-            case 2:
-                return new Rest();
-            default:
-                return new ChaseClosest();
-        }
-    }
-
+    /**
+     * updates the state of the corporation
+     * calls the random state generator function @see
+     * Corporation.generateRandomState()
+     * 
+     * @params
+     * @return
+     */
     public void update() {
-        this.state = generateRandomState();
+        this.state = Common.generateRandomState();
     }
 
     // TODO
     // Corporation image is 100 x 100
     // Cash RGB --> (180, 0, 0)
     // Badge is 20 x 20
+    /**
+     * 
+     * @return name of corporation
+     */
     public String getName() {
         return this.name;
     }

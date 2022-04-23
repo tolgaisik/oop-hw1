@@ -1,22 +1,20 @@
+/**
+ * Randomly moves the entity couple of pixels around
+ * This is a movement behavior
+ * 
+ * @params
+ */
 public class Shake extends State {
-
+    /**
+     * It takes an Entity object and updates it current state which is Shake
+     * Shake does a random movement to a random direction.
+     */
     @Override
-    public double getX() {
-        return Common.getRandomGenerator().nextDouble(10);
-    }
+    public Position next(Entity entity) {
 
-    @Override
-    public double getY() {
-        return Common.getRandomGenerator().nextDouble(10);
-    }
-
-    @Override
-    public boolean updateState(Position position) {
-        return false;
-    }
-
-    @Override
-    public Position getNextPosition(Entity entity) {
+        /**
+         * get current position and update
+         */
         Position p = new Position(entity.getPosition().getX() + Common.getRandomGenerator().nextDouble(-3, 3),
                 entity.getPosition().getY() + Common.getRandomGenerator().nextDouble(-3, 3));
         return p;

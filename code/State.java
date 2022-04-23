@@ -1,11 +1,17 @@
 public abstract class State {
-    abstract public boolean updateState(Position position);
+    /**
+     * Get next position of entity
+     * 
+     * @param entity
+     * @return
+     */
+    abstract public Position next(Entity entity);
 
-    abstract public double getX();
-
-    abstract public double getY();
-
-    abstract public Position getNextPosition(Entity entity);
-
+    /**
+     * Get state name
+     * 
+     * @param
+     * @return String state's name
+     */
     abstract public String getState();
 }

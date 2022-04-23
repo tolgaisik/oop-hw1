@@ -16,23 +16,8 @@ public class Common {
     private static final LivePrice foodPrice = new LivePrice(30, 65, "Food Products", 5, 1, 1, 10);
     private static final LivePrice electronicsPrice = new LivePrice(580, 65, "Consumer Electronics", 30, 2, 10, 50);
     private static final LivePrice goldPrice = new LivePrice(1300, 65, "Gold", 75, 3, 50, 100);
-    private static final List<Country> countries = Arrays.asList(
-            new Country((int) (windowWidth / 6) - 75, 600, "poland"),
-            new Country((int) (windowWidth / 6) * 2 - 75, 600, "chile"),
-            new Country((int) (windowWidth / 6) * 3 - 75, 600, "malaysia"),
-            new Country((int) (windowWidth / 6) * 4 - 75, 600, "mexico"),
-            new Country((int) (windowWidth / 6) * 5 - 75, 600, "nigeria"));
-    private static final List<Corporation> corporations = Arrays.asList(
-            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
-                    "boeing"),
-            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
-                    "general_dynamics"),
-            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
-                    "lockheed_martin"),
-            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
-                    "northrop_grumman"),
-            new Corporation(randomGenerator.nextInt(windowWidth), randomGenerator.nextInt(getHorizontalLineY(), 600),
-                    "raytheon"));
+    private static final List<Country> countries;
+    private static final List<Corporation> corporations;
 
     // getters
     public static String getTitle() {
@@ -87,8 +72,48 @@ public class Common {
         return corporations;
     }
 
-    static {
+    /**
+     * generates a random state
+     * 
+     * @return State object
+     */
+    public static State generateRandomState() {
+        int type = new Random().nextInt(4);
+        switch (type) {
+            case 0:
+                return new Shake();
+            case 1:
+                return new GotoXY();
+            case 2:
+                return new Rest();
+            default:
+                return new ChaseClosest();
+        }
+    }
 
+    static {
+        countries = Arrays.asList(
+                new Country((int) (windowWidth / 6) - 75, 600, "poland"),
+                new Country((int) (windowWidth / 6) * 2 - 75, 600, "chile"),
+                new Country((int) (windowWidth / 6) * 3 - 75, 600, "malaysia"),
+                new Country((int) (windowWidth / 6) * 4 - 75, 600, "mexico"),
+                new Country((int) (windowWidth / 6) * 5 - 75, 600, "nigeria"));
+        corporations = Arrays.asList(
+                new Corporation(randomGenerator.nextInt(windowWidth),
+                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        "boeing"),
+                new Corporation(randomGenerator.nextInt(windowWidth),
+                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        "general_dynamics"),
+                new Corporation(randomGenerator.nextInt(windowWidth),
+                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        "lockheed_martin"),
+                new Corporation(randomGenerator.nextInt(windowWidth),
+                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        "northrop_grumman"),
+                new Corporation(randomGenerator.nextInt(windowWidth),
+                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        "raytheon"));
     }
 
     public static void stepAllEntities() {
@@ -98,9 +123,9 @@ public class Common {
             electronicsPrice.step();
         if (randomGenerator.nextInt(400) == 0)
             goldPrice.step();
+        // for each corporation
         corporations.forEach(Corporation::step);
         if (randomGenerator.nextInt(50) == 0)
             corporations.forEach(Corporation::update);
-        // TODO: call other entities' step()
     }
 }
