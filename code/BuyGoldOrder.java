@@ -18,6 +18,5 @@ public class BuyGoldOrder extends GoldOrder {
         // TODO Auto-generated method stub
 
     }
-    // TODO
-    // RGB --> (0, 200, 0)
+
 }

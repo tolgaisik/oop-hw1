@@ -16,6 +16,8 @@ public class Common {
     private static final LivePrice foodPrice = new LivePrice(30, 65, "Food Products", 5, 1, 1, 10);
     private static final LivePrice electronicsPrice = new LivePrice(580, 65, "Consumer Electronics", 30, 2, 10, 50);
     private static final LivePrice goldPrice = new LivePrice(1300, 65, "Gold", 75, 3, 50, 100);
+
+    // additional entities added below
     private static final List<Country> countries;
     private static final List<Corporation> corporations;
 
@@ -64,6 +66,7 @@ public class Common {
         return countries.stream().filter(country -> country.getName().equals(name)).findFirst().get();
     }
 
+    // additional methods added below
     public static List<Country> getCountries() {
         return countries;
     }
