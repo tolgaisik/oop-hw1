@@ -35,7 +35,7 @@ public class Corporation extends Entity {
                     (int) position.getY(), null);
         }
         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 20));
-        g.drawString(this.state.getState(), (int) position.getX() + 15, (int) position.getY() + 120);
+        g.drawString(this.state.getName(), (int) position.getX() + 15, (int) position.getY() + 120);
     }
 
     /**
@@ -51,12 +51,10 @@ public class Corporation extends Entity {
         // and based on the current state it generates new destination
         Position p = state.next(this);
 
-        // We have to check if the position is outside of the sandbox
+        // We have to check if the next position is outside of the sandbox
         // If it is, we just pass
-        if (Common.isInSandbox(this)) {
-            this.position.setX(p.getX());
-            this.position.setY(p.getY());
-        }
+        this.position.setX(p.getX());
+        this.position.setY(p.getY());
 
     }
 
@@ -65,7 +63,7 @@ public class Corporation extends Entity {
      * 
      * @return State object
      */
-    public static State createState(String stateType) {
+    public State createState(String stateType) {
         try {
             Class<?> stateClass = Class.forName(stateType);
             Constructor<?> constructor = stateClass.getConstructors()[0];
@@ -77,10 +75,26 @@ public class Corporation extends Entity {
         }
     }
 
-    // TODO
-    // Corporation image is 100 x 100
-    // Cash RGB --> (180, 0, 0)
-    // Badge is 20 x 20
+    /**
+     * sets the current state of the country with the given parameter state object
+     * 
+     * @see State
+     * @param state
+     * @return void
+     */
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    /**
+     * returns the current state of the country
+     * 
+     * @return State
+     */
+    public State getState() {
+        return this.state;
+    }
+
     /**
      * 
      * @return name of corporation
@@ -88,4 +102,10 @@ public class Corporation extends Entity {
     public String getName() {
         return this.name;
     }
+
+    // TODO
+    // Corporation image is 100 x 100
+    // Cash RGB --> (180, 0, 0)
+    // Badge is 20 x 20
+
 }

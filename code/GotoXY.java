@@ -23,7 +23,7 @@ public class GotoXY extends State {
     }
 
     @Override
-    public String getState() {
+    public String getName() {
         return this.getClass().getName();
     }
 

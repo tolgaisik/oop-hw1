@@ -21,7 +21,7 @@ public class Shake extends State {
     }
 
     @Override
-    public String getState() {
+    public String getName() {
         return this.getClass().getName();
     }
 }

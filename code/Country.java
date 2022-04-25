@@ -6,6 +6,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
 public class Country extends Entity {
     String name;
     double cash;
@@ -14,6 +15,7 @@ public class Country extends Entity {
     double happiness;
     Image image = null;
     final static int gap = 30;
+
     public Country(double x, double y, String name) {
         super(x, y);
         this.name = name;
@@ -32,7 +34,7 @@ public class Country extends Entity {
                     (int) position.getY(), null);
         }
 
-         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 15));
+        g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 15));
         g.drawString(this.name, (int) position.getX(),
                 (int) position.getY() + 200);
 
@@ -66,23 +68,25 @@ public class Country extends Entity {
     public void step() {
         // TODO Auto-generated method stub
         // calculate variables of the current country
-        // 
+        // check if there is a order at the horizon
+        // if there is, calculate the country economics
     }
 
     /**
-    * @param orderClassName
-    * @return Order
-    * takes order name for the creation
-    * since Country class is a OrderFactory 
-    * using reflection helps us the distinction between Country and Order classes
-    */
+     * @param orderClassName
+     * @return Order
+     *         takes order name for the creation
+     *         since Country class is a OrderFactory
+     *         using reflection helps us the distinction between Country and Order
+     *         classes
+     */
     public Order createOrder(String orderClassName) {
         try {
             Class<?> stateClass = Class.forName(orderClassName);
             Constructor<?> constructor = stateClass.getConstructor(Integer.class, Integer.class);
-            return (Order) constructor.newInstance((int)this.getPosition().getX(), (int)this.getPosition().getY());
+            return (Order) constructor.newInstance((int) this.getPosition().getX(), (int) this.getPosition().getY());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
+                | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
             return null;
         }

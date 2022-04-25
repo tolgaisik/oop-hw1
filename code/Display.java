@@ -25,5 +25,8 @@ public class Display extends JPanel {
 
         Common.getCountries().forEach(country -> country.draw((Graphics2D) g));
         Common.getCorporations().forEach(corporation -> corporation.draw((Graphics2D) g));
+        g.setColor(Color.RED);
+        g.drawRect((int) Common.getSandBox().getX(), (int) Common.getSandBox().getY(),
+                (int) Common.getSandBox().getWidth(), (int) Common.getSandBox().getHeight());
     }
 }

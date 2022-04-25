@@ -1,5 +1,3 @@
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,13 +60,14 @@ public class Common {
     public static LivePrice getGoldPrice() {
         return goldPrice;
     }
-    
-    // additional entities added below
+
+    // TODO: additional entities added below
     private static final List<Country> countries;
     private static final List<Corporation> corporations;
     private static final Rectangle sandbox;
     private static final List<Order> orders;
     private static final int countryTop;
+    private static final List<String> states;
     static {
 
         // init sandbox
@@ -77,7 +76,7 @@ public class Common {
                 500 - getHorizontalLineY());
 
         // lower y coordinate of rectangle
-        countryTop = sandbox.y + sandbox.height;
+        countryTop = 600;
 
         // init countries with names and insert them to the proper places
         countries = Arrays.asList(
@@ -89,30 +88,32 @@ public class Common {
 
         // init corporations with names and insert them to the random places within the
         // sandbox
+        Random rand = new Random();
         corporations = Arrays.asList(
-                new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
+                new Corporation(rand.nextInt(windowWidth),
+                        rand.nextInt(countryTop) + getHorizontalLineY(),
                         "boeing", "Shake"),
-                new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
+                new Corporation(rand.nextInt(windowWidth),
+                        rand.nextInt(countryTop) + getHorizontalLineY(),
                         "general_dynamics", "Rest"),
-                new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
+                new Corporation(rand.nextInt(windowWidth),
+                        rand.nextInt(countryTop) + getHorizontalLineY(),
                         "lockheed_martin", "ChaseClosest"),
-                new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
+                new Corporation(rand.nextInt(windowWidth),
+                        rand.nextInt(countryTop) + getHorizontalLineY(),
                         "northrop_grumman", "GotoXY"),
-                new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
+                new Corporation(rand.nextInt(windowWidth),
+                        rand.nextInt(countryTop) + getHorizontalLineY(),
                         "raytheon", "GotoXY"));
 
         // orders will added to here
         orders = new ArrayList<>();
+
+        // possible states array
+        states = Arrays.asList("Shake", "Rest", "ChaseClosest", "GotoXY");
     }
 
-
     // additional methods added below
-
     /**
      * 
      * @param name
@@ -140,21 +141,48 @@ public class Common {
      * @param entity
      * @return boolean
      */
-    public static boolean isInSandbox(Entity entity) {
-        Position position = entity.getPosition();
-        return sandbox.contains(new Point((int) position.getX(), (int) position.getY()));
+    public static boolean isInSandbox(Position p) {
+        return sandbox.contains(new Point((int) p.getX(), (int) p.getY()));
     }
 
+    /**
+     * returns the list of countries
+     * 
+     * @see Common#countries
+     * @return List<Country>
+     */
     public static List<Country> getCountries() {
         return countries;
     }
 
+    /**
+     * returns the list of corporations
+     * 
+     * @see Common#corporations
+     * @return List<Corporation>
+     */
     public static List<Corporation> getCorporations() {
         return corporations;
     }
 
+    /**
+     * returns the list of orders
+     * 
+     * @see Common#orders
+     * @return List<Order>
+     */
     public static List<Order> getOrders() {
         return orders;
+    }
+
+    /**
+     * returns a random state name from the states list
+     * 
+     * @see Common#states
+     * @return String
+     */
+    public static String getStateClassName() {
+        return states.get(randomGenerator.nextInt(states.size()));
     }
 
     public static void stepAllEntities() {
@@ -164,8 +192,22 @@ public class Common {
             electronicsPrice.step();
         if (randomGenerator.nextInt(400) == 0)
             goldPrice.step();
-        // for each corporation
-        corporations.forEach(Corporation::step);
+
+        // update each corporation based ont current and some random values
+        corporations.stream().forEach(corp -> {
+            // randomly change their states
+            if (randomGenerator.nextInt(100) == 0)
+                corp.setState(corp.createState(getStateClassName()));
+
+            // if corporation is outside of the sandbox then
+            // move it back to the sandbox
+            if (!isInSandbox(corp.getPosition()) && corp.getState().getName() != "GotoXY")
+                corp.setState(corp.createState("GotoXY"));
+
+            // update the corporation entity
+            corp.step();
+
+        });
         // for each country
     }
 }

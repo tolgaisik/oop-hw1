@@ -13,5 +13,5 @@ public abstract class State {
      * @param
      * @return String state's name
      */
-    abstract public String getState();
+    abstract public String getName();
 }
