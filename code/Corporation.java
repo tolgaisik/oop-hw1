@@ -2,6 +2,10 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -11,7 +15,7 @@ public class Corporation extends Entity {
     private Image image;
     private State state;
 
-    public Corporation(double x, double y, String name) {
+    public Corporation(double x, double y, String name, String initStateName) {
         super(x, y);
         this.name = name;
         try {
@@ -20,7 +24,7 @@ public class Corporation extends Entity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.state = Common.generateRandomState();
+        this.state = createState(initStateName);
     }
 
     @Override
@@ -42,21 +46,35 @@ public class Corporation extends Entity {
      */
     @Override
     public void step() {
-        Position p = this.state.next(this);
-        this.position.setX(p.getX());
-        this.position.setY(p.getY());
+
+        // state next function takes an entity object
+        // and based on the current state it generates new destination
+        Position p = state.next(this);
+
+        // We have to check if the position is outside of the sandbox
+        // If it is, we just pass
+        if (Common.isInSandbox(this)) {
+            this.position.setX(p.getX());
+            this.position.setY(p.getY());
+        }
+
     }
 
     /**
-     * updates the state of the corporation
-     * calls the random state generator function @see
-     * Corporation.generateRandomState()
+     * generates a state
      * 
-     * @params
-     * @return
+     * @return State object
      */
-    public void update() {
-        this.state = Common.generateRandomState();
+    public static State createState(String stateType) {
+        try {
+            Class<?> stateClass = Class.forName(stateType);
+            Constructor<?> constructor = stateClass.getConstructors()[0];
+            return (State) constructor.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // TODO

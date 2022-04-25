@@ -5,12 +5,8 @@ import java.awt.*;
  *            current frame.
  */
 public class GotoXY extends State {
-    double dest_x, dest_y;
-
-    GotoXY() {
-        dest_x = Common.getRandomGenerator().nextDouble(Common.getWindowWidth());
-        dest_y = Common.getRandomGenerator().nextDouble(Common.getWindowHeight());
-    }
+    double dest_x = Common.getRandomGenerator().nextDouble(Common.getSandBox().width);
+    double dest_y = Common.getRandomGenerator().nextDouble(Common.getSandBox().height + Common.getSandBox().y);
 
     @Override
     public Position next(Entity entity) {

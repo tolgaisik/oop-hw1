@@ -66,8 +66,21 @@ public class Country extends Entity {
     @Override
     public void step() {
         // TODO Auto-generated method stub
+        // create order
 
     }
+
+    public Order createOrder(String orderClassName) {
+        try {
+            Class<?> orderClass = Class.forName(orderClassName);
+            Order order = (Order) orderClass.newInstance();
+            return order;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // TODO
     // Country image is 150 x 150
     // Name RGB --> Black
