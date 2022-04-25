@@ -62,48 +62,54 @@ public class Common {
     public static LivePrice getGoldPrice() {
         return goldPrice;
     }
-
+    
+    // additional entities added below
+    private static final List<Country> countries;
+    private static final List<Corporation> corporations;
+    private static final Rectangle sandbox;
+    private static final List<Order> orders;
+    private static final int countryTop;
     static {
+
         // init sandbox
+        // Rectangle shows the area that corporations are not allowed to leave
         sandbox = new Rectangle(0, getHorizontalLineY(), windowWidth,
                 500 - getHorizontalLineY());
 
+        // lower y coordinate of rectangle
+        countryTop = sandbox.y + sandbox.height;
+
         // init countries with names and insert them to the proper places
         countries = Arrays.asList(
-                new Country((int) (windowWidth / 6) - 75, 600, "poland"),
-                new Country((int) (windowWidth / 6) * 2 - 75, 600, "chile"),
-                new Country((int) (windowWidth / 6) * 3 - 75, 600, "malaysia"),
-                new Country((int) (windowWidth / 6) * 4 - 75, 600, "mexico"),
-                new Country((int) (windowWidth / 6) * 5 - 75, 600, "nigeria"));
+                new Country((int) (sandbox.width / 6) - 75, countryTop, "poland"),
+                new Country((int) (sandbox.width / 6) * 2 - 75, countryTop, "chile"),
+                new Country((int) (sandbox.width / 6) * 3 - 75, countryTop, "malaysia"),
+                new Country((int) (sandbox.width / 6) * 4 - 75, countryTop, "mexico"),
+                new Country((int) (sandbox.width / 6) * 5 - 75, countryTop, "nigeria"));
 
         // init corporations with names and insert them to the random places within the
         // sandbox
         corporations = Arrays.asList(
                 new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
                         "boeing", "Shake"),
                 new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
                         "general_dynamics", "Rest"),
                 new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
                         "lockheed_martin", "ChaseClosest"),
                 new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
                         "northrop_grumman", "GotoXY"),
                 new Corporation(randomGenerator.nextInt(windowWidth),
-                        randomGenerator.nextInt(getHorizontalLineY(), 600),
+                        randomGenerator.nextInt(countryTop) + getHorizontalLineY(),
                         "raytheon", "GotoXY"));
 
         // orders will added to here
         orders = new ArrayList<>();
     }
 
-    // additional entities added below
-    private static final List<Country> countries;
-    private static final List<Corporation> corporations;
-    private static final Rectangle sandbox;
-    private static final List<Order> orders;
 
     // additional methods added below
 

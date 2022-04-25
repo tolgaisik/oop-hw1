@@ -3,9 +3,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
-
 import javax.imageio.ImageIO;
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 public class Country extends Entity {
     String name;
     double cash;
@@ -13,7 +13,7 @@ public class Country extends Entity {
     double worth;
     double happiness;
     Image image = null;
-
+    final static int gap = 30;
     public Country(double x, double y, String name) {
         super(x, y);
         this.name = name;
@@ -32,8 +32,7 @@ public class Country extends Entity {
                     (int) position.getY(), null);
         }
 
-        g.setFont(new Font("Arial", Font.BOLD, 22));
-
+         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 15));
         g.drawString(this.name, (int) position.getX(),
                 (int) position.getY() + 200);
 
@@ -66,22 +65,29 @@ public class Country extends Entity {
     @Override
     public void step() {
         // TODO Auto-generated method stub
-        // create order
-
+        // calculate variables of the current country
+        // 
     }
 
+    /**
+    * @param orderClassName
+    * @return Order
+    * takes order name for the creation
+    * since Country class is a OrderFactory 
+    * using reflection helps us the distinction between Country and Order classes
+    */
     public Order createOrder(String orderClassName) {
         try {
-            Class<?> orderClass = Class.forName(orderClassName);
-            Order order = (Order) orderClass.newInstance();
-            return order;
-        } catch (Exception e) {
+            Class<?> stateClass = Class.forName(orderClassName);
+            Constructor<?> constructor = stateClass.getConstructor(Integer.class, Integer.class);
+            return (Order) constructor.newInstance((int)this.getPosition().getX(), (int)this.getPosition().getY());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
-    // TODO
     // Country image is 150 x 150
     // Name RGB --> Black
     // Worth RGB --> Blue
