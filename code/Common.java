@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -65,15 +67,16 @@ public class Common {
     private static final List<Country> countries;
     private static final List<Corporation> corporations;
     private static final Rectangle sandbox;
-    private static final List<Order> orders;
+    private static List<Order> orders;
     private static final int countryTop;
     private static final List<String> states;
+    private static final List<String> orderTypes;
     static {
 
         // init sandbox
         // Rectangle shows the area that corporations are not allowed to leave
         sandbox = new Rectangle(0, getHorizontalLineY(), windowWidth,
-                500 - getHorizontalLineY());
+                600 - getHorizontalLineY());
 
         // lower y coordinate of rectangle
         countryTop = 600;
@@ -108,7 +111,7 @@ public class Common {
 
         // orders will added to here
         orders = new ArrayList<>();
-
+        orderTypes = Arrays.asList("FoodOrder", "ElectronicsOrder", "BuyGoldOrder", "SellGoldOrder");
         // possible states array
         states = Arrays.asList("Shake", "Rest", "ChaseClosest", "GotoXY");
     }
@@ -125,8 +128,8 @@ public class Common {
 
     /**
      * sandbox is a rectangle object
-     * that covers the horizontal top line the top of the countries
-     * returns the sandbox rectangle
+     * that covers the horizontal top line and
+     * the top of the countries returns the sandbox rectangle
      * 
      * @return sandbox rectangle
      */
@@ -192,15 +195,63 @@ public class Common {
             electronicsPrice.step();
         if (randomGenerator.nextInt(400) == 0)
             goldPrice.step();
+        updateCorps(corporations);
+        updateCountries(countries);
+        updateOrders();
+    }
 
-        // update each corporation based ont current and some random values
-        corporations.stream().forEach(corp -> {
+    private static void updateOrders() {
+        orders = orders.stream().filter(order -> {
+            order.step();
+            // if order is on the horizontal line
+            if (order.getPosition().getY() < getHorizontalLineY()) {
+                order.out();
+                return false;
+            }
+            return true;
+
+        }).collect(Collectors.toList());
+    }
+
+    private static void updateCountries(List<Country> countries) {
+        // for each country
+        countries.forEach(country -> {
+            // create orders
+            if (randomGenerator.nextInt(200) == 0) {
+
+                // create a random order class name from the list orderTypes
+                String className = orderTypes.get(randomGenerator.nextInt(orderTypes.size()));
+
+                // create order with using the string class name
+                // luckily, the country knows nothing about what type of order it creates
+                Order order = country.createOrder(className);
+
+                // if it is an import to raise the happiness happiness should
+                // be less than 50 percent
+                if (className.equals("FoodOrder") && className.equals("ElectronicsOrder")) {
+                    if (country.happiness < 50) {
+                        orders.add(order);
+                    }
+                } else {
+                    // gold order
+                    orders.add(order);
+                }
+
+            }
+            country.step();
+        });
+    }
+
+    private static void updateCorps(List<Corporation> corps) {
+        // update each corporation based on the current and some random values
+        corps.forEach(corp -> {
             // randomly change their states
             if (randomGenerator.nextInt(100) == 0)
                 corp.setState(corp.createState(getStateClassName()));
 
             // if corporation is outside of the sandbox then
-            // move it back to the sandbox
+            // move it back to the sandbox and
+            // its state is not GotoXY go to the x y which are inside sandbox
             if (!isInSandbox(corp.getPosition()) && corp.getState().getName() != "GotoXY")
                 corp.setState(corp.createState("GotoXY"));
 
@@ -208,6 +259,5 @@ public class Common {
             corp.step();
 
         });
-        // for each country
     }
 }

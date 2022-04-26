@@ -27,22 +27,4 @@ public class GotoXY extends State {
         return this.getClass().getName();
     }
 
-    /*
-     * public static void main(String[] args) {
-     * int x1, y1, x2, y2; // 2 is target
-     * x1 = 0;
-     * y1 = 0;
-     * x2 = 0;
-     * y2 = 100;
-     * Point dirVector = new Point(x2 - x1, y2 - y1);
-     * // normalize direction
-     * double length = Math.sqrt(dirVector.x * dirVector.x + dirVector.y *
-     * dirVector.y);
-     * dirVector.x = (int) Math.round(dirVector.x / length);
-     * dirVector.y = (int) Math.round(dirVector.y / length);
-     * 
-     * System.out.println("x: " + dirVector.x + " y: " + dirVector.y);
-     * 
-     * }
-     */
 }
