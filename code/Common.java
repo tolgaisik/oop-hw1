@@ -92,21 +92,22 @@ public class Common {
         // init corporations with names and insert them to the random places within the
         // sandbox
         Random rand = new Random();
+        int horizontalLineY = getHorizontalLineY();
         corporations = Arrays.asList(
                 new Corporation(rand.nextInt(windowWidth),
-                        rand.nextInt(countryTop) + getHorizontalLineY(),
+                        rand.nextInt(countryTop) + horizontalLineY,
                         "boeing", "Shake"),
                 new Corporation(rand.nextInt(windowWidth),
-                        rand.nextInt(countryTop) + getHorizontalLineY(),
+                        rand.nextInt(countryTop) + horizontalLineY,
                         "general_dynamics", "Rest"),
                 new Corporation(rand.nextInt(windowWidth),
-                        rand.nextInt(countryTop) + getHorizontalLineY(),
+                        rand.nextInt(countryTop) + horizontalLineY,
                         "lockheed_martin", "ChaseClosest"),
                 new Corporation(rand.nextInt(windowWidth),
-                        rand.nextInt(countryTop) + getHorizontalLineY(),
+                        rand.nextInt(countryTop) + horizontalLineY,
                         "northrop_grumman", "GotoXY"),
                 new Corporation(rand.nextInt(windowWidth),
-                        rand.nextInt(countryTop) + getHorizontalLineY(),
+                        rand.nextInt(countryTop) + horizontalLineY,
                         "raytheon", "GotoXY"));
 
         // orders will added to here
