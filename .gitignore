@@ -2,3 +2,4 @@ bin
 *.class
 .vscode
 /bin/*
+.DS_Store
