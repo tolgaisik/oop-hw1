@@ -58,9 +58,11 @@ public class Corporation extends Entity {
             g.drawImage(this.image, x,
                     y, null);
         }
-        g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 20));
+        g.setColor(Color.BLUE);
         g.drawString(this.state.getName(), x + 15, y + 120);
+        g.setColor(Color.RED);
         g.drawString(Integer.toString((int) cash), x + 15, y + 140);
+        g.setColor(Color.BLACK);
 
     }
 

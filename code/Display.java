@@ -16,6 +16,7 @@ public class Display extends JPanel {
         super.paintComponent(g2d);
         Graphics2D g = (Graphics2D) g2d;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 20));
         Common.getFoodPrice().draw(g);
         Common.getElectronicsPrice().draw(g);
         Common.getGoldPrice().draw(g);
