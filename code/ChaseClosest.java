@@ -63,6 +63,13 @@ public class ChaseClosest extends State {
         return this.getClass().getName();
     }
 
+    /**
+     * calculates the distance between two position
+     * 
+     * @param position1
+     * @param position2
+     * @return
+     */
     public double distance(Position position1, Position position2) {
         return Math.sqrt(
                 Math.pow(position1.getX() - position2.getX(), 2) + Math.pow(position1.getY() - position2.getY(), 2));

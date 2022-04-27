@@ -12,7 +12,7 @@ public class Corporation extends Entity {
     private String name;
     private Image image;
     private State state;
-    private int cash;
+    private double cash;
 
     public Corporation(double x, double y, String name, String initStateName) {
         super(x, y);
@@ -36,6 +36,16 @@ public class Corporation extends Entity {
         }
         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 20));
         g.drawString(this.state.getName(), (int) position.getX() + 15, (int) position.getY() + 120);
+    }
+
+    // define getters
+    double getCash() {
+        return cash;
+    }
+
+    // define setters
+    void setCash(double cash) {
+        this.cash = (int) cash;
     }
 
     /**
