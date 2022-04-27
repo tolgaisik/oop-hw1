@@ -25,8 +25,8 @@ public class GotoXY extends State {
                 (int) (this.dest_y - currentPosition.getY()));
         // vector magnitude
         double length = Math.sqrt(directionVector.x * directionVector.x + directionVector.y * directionVector.y);
-        directionVector.x = (int) Math.round(directionVector.x / length); // normalize x
-        directionVector.y = (int) Math.round(directionVector.y / length); // normalize y
+        directionVector.x = (int) Math.round(2 * (directionVector.x / length)); // normalize x
+        directionVector.y = (int) Math.round(2 * (directionVector.y / length)); // normalize y
         return new Position(currentPosition.getX() + directionVector.x, currentPosition.getY() + directionVector.y);
 
     }

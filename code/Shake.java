@@ -15,8 +15,8 @@ public class Shake extends State {
         /**
          * get current position and update
          */
-        Position p = new Position(entity.getPosition().getX() + Common.getRandomGenerator().nextDouble(-3, 3),
-                entity.getPosition().getY() + Common.getRandomGenerator().nextDouble(-3, 3));
+        Position p = new Position(entity.getPosition().getX() + Common.getRandomGenerator().nextDouble(-2, 2),
+                entity.getPosition().getY() + Common.getRandomGenerator().nextDouble(-2, 2));
         return p;
     }
 

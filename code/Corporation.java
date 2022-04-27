@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -10,13 +11,15 @@ import javax.imageio.ImageIO;
 
 public class Corporation extends Entity {
     private String name;
+    private String acronym;
     private Image image;
     private State state;
     private double cash;
 
     public Corporation(double x, double y, String name, String initStateName) {
         super(x, y);
-        this.name = name;
+        this.name = name.split(":")[0];
+        this.acronym = name.split(":")[1];
         try {
             image = ImageIO.read(new File("images/" + this.name + ".png")).getScaledInstance(100, 100,
                     Image.SCALE_DEFAULT);
@@ -24,18 +27,41 @@ public class Corporation extends Entity {
             e.printStackTrace();
         }
         this.state = createState(initStateName);
-        this.cash = new Random().nextInt(1000);
+        this.cash = new Random().nextInt(2000) + 1000;
     }
 
     @Override
     public void draw(Graphics2D g) {
         // draw corporate image
+        int x = position.getIntX();
+        int y = position.getIntY();
+
+        if (cash > 2000) // white badge
+        {
+            g.setColor(Color.WHITE);
+            g.fillRect(x, y - 40, 15, 15);
+        }
+        if (cash > 4000) // yellow badge
+        {
+            g.setColor(Color.YELLOW);
+            g.fillRect(x + 15, y - 40, 15, 15);
+        }
+        if (cash > 6000) // red badge
+        {
+            g.setColor(Color.RED);
+            g.fillRect(x + 30, y - 40, 15, 15);
+        }
+        g.setColor(Color.BLACK);
+
+        g.drawString(this.acronym, x, y - 10);
         if (this.image != null) {
-            g.drawImage(this.image, (int) position.getX(),
-                    (int) position.getY(), null);
+            g.drawImage(this.image, x,
+                    y, null);
         }
         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 20));
-        g.drawString(this.state.getName(), (int) position.getX() + 15, (int) position.getY() + 120);
+        g.drawString(this.state.getName(), x + 15, y + 120);
+        g.drawString(Integer.toString((int) cash), x + 15, y + 140);
+
     }
 
     // define getters

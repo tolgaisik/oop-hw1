@@ -28,14 +28,13 @@ public class Country extends Entity {
             e.printStackTrace();
         }
         init();
-
     }
 
     private void init() {
         Random rand = new Random();
-        cash = rand.nextDouble(100);
-        gold = rand.nextDouble(100);
-        worth = rand.nextDouble(100);
+        cash = rand.nextDouble(3000) + 1000;
+        gold = rand.nextDouble(100) + 50;
+        worth = this.cash + this.gold * Common.getGoldPrice().getCurrentPrice();
         happiness = rand.nextDouble(100);
     }
 
@@ -43,47 +42,49 @@ public class Country extends Entity {
     public void draw(Graphics2D g) {
         int x = (int) this.position.getX();
         int y = (int) this.position.getY();
+
         if (image != null) {
             g.drawImage(image, x,
                     y, null);
         }
-
         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 15));
+        g.setColor(Color.BLACK);
         g.drawString(this.name, x,
-                y + 200);
+                y + 170);
+
         // draw worth value
         g.setColor(Color.BLUE);
         g.drawString("Worth : ", x,
-                y + 240);
-        g.drawString((int) this.worth + "", x + 150,
-                y + 240);
+                y + 190);
+        g.drawString(String.format("%.2f", worth), x + 150,
+                y + 185);
+
         // draw cash value
         g.setColor(new Color(0, 100, 0));
         g.drawString("Cash : ", x,
-                y + 280);
-        g.drawString((int) this.cash + "", x + 150,
-                y + 280);
+                y + 210);
+        g.drawString(String.format("%.2f", cash), x + 150,
+                y + 210);
+
         // draw gold value
         g.setColor(Color.YELLOW);
         g.drawString("Gold : ", x,
-                y + 320);
-        g.drawString((int) this.gold + "", x + 150,
-                y + 320);
+                y + 230);
+        g.drawString(String.format("%.2f", gold), x + 150,
+                y + 230);
+
         // draw happiness value
         g.setColor(new Color(180, 0, 0));
         g.drawString("Happiness : ", x,
-                y + 360);
-        g.drawString((int) this.happiness + "", x + 150,
-                y + 360);
+                y + 250);
+        g.drawString(String.format("%.2f", happiness), x + 150,
+                y + 250);
 
     }
 
     @Override
     public void step() {
-        // TODO Auto-generated method stub
         // calculate variables of the current country
-        // check if there is a order at the horizon
-        // if there is, calculate the country economics
         this.worth = this.cash + this.gold * Common.getGoldPrice().getCurrentPrice();
 
     }
@@ -108,13 +109,6 @@ public class Country extends Entity {
             return null;
         }
     }
-
-    // Country image is 150 x 150
-    // Name RGB --> Black
-    // Worth RGB --> Blue
-    // Cash RGB --> (0, 100, 0)
-    // Gold RGB --> Yellow
-    // Happiness RGB --> (180, 0, 0)
 
     public String getName() {
         return this.name;
@@ -147,6 +141,10 @@ public class Country extends Entity {
 
     public void loseHappiness(double d) {
         this.happiness -= d;
+    }
+
+    public double getHappiness() {
+        return happiness;
     }
 
 }

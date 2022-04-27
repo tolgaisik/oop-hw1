@@ -76,10 +76,10 @@ public class Common {
         // init sandbox
         // Rectangle shows the area that corporations are not allowed to leave
         sandbox = new Rectangle(0, getHorizontalLineY(), windowWidth,
-                600 - getHorizontalLineY());
+                650 - getHorizontalLineY());
 
         // lower y coordinate of rectangle
-        countryTop = 600;
+        countryTop = 650;
 
         // init countries with names and insert them to the proper places
         countries = Arrays.asList(
@@ -89,26 +89,26 @@ public class Common {
                 new Country((int) (sandbox.width / 6) * 4 - 75, countryTop, "mexico"),
                 new Country((int) (sandbox.width / 6) * 5 - 75, countryTop, "nigeria"));
 
-        // init corporations with names and insert them to the random places within the
-        // sandbox
+        // init corporations with names and insert them
+        // to the random places within the sandbox
         Random rand = new Random();
         int horizontalLineY = getHorizontalLineY();
         corporations = Arrays.asList(
                 new Corporation(rand.nextInt(windowWidth),
                         rand.nextInt(countryTop) + horizontalLineY,
-                        "boeing", "Shake"),
+                        "boeing:BA", "Shake"),
                 new Corporation(rand.nextInt(windowWidth),
                         rand.nextInt(countryTop) + horizontalLineY,
-                        "general_dynamics", "Rest"),
+                        "general_dynamics:GD", "Rest"),
                 new Corporation(rand.nextInt(windowWidth),
                         rand.nextInt(countryTop) + horizontalLineY,
-                        "lockheed_martin", "ChaseClosest"),
+                        "lockheed_martin:LMT", "ChaseClosest"),
                 new Corporation(rand.nextInt(windowWidth),
                         rand.nextInt(countryTop) + horizontalLineY,
-                        "northrop_grumman", "GotoXY"),
+                        "northrop_grumman:NOC", "GotoXY"),
                 new Corporation(rand.nextInt(windowWidth),
                         rand.nextInt(countryTop) + horizontalLineY,
-                        "raytheon", "GotoXY"));
+                        "raytheon:RTX", "GotoXY"));
 
         // orders will added to here
         orders = new ArrayList<>();
@@ -202,8 +202,12 @@ public class Common {
         updateCorps(corporations);
         updateCountries(countries);
         updateOrders();
+        removeDisposedOrders();
     }
 
+    /**
+     * step orders if they are out call out
+     */
     private static void updateOrders() {
         orders.forEach(order -> {
             order.step();
@@ -211,7 +215,6 @@ public class Common {
                 order.out();
             }
         });
-        removeDisposedOrders();
     }
 
     /**
@@ -236,7 +239,7 @@ public class Common {
         // for each country
         countries.forEach(country -> {
             // create orders
-            if (randomGenerator.nextInt(200) == 0) {
+            if (randomGenerator.nextInt(150) == 0) {
 
                 // create a random order class name from the list orderTypes
                 String className = orderTypes.get(randomGenerator.nextInt(orderTypes.size()));
@@ -246,12 +249,12 @@ public class Common {
 
                 // if it is an import to raise the happiness happiness should
                 // be less than 50 percent
-                if ((className.equals("FoodOrder") || className.equals("ElectronicsOrder")) && country.happiness < 50) {
-                    Order order = country.createOrder(className);
-                    orders.add(order);
+                Order order = country.createOrder(className);
+                if (order instanceof FoodOrder || order instanceof ElectronicsOrder) {
+                    if (country.getHappiness() < 50)
+                        orders.add(order);
                 } else {
                     // gold order
-                    Order order = country.createOrder(className);
                     orders.add(order);
                 }
 
