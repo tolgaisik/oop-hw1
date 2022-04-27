@@ -5,9 +5,18 @@ import java.awt.*;
  *            current frame.
  */
 public class GotoXY extends State {
+    // created randomly destination points over the safe area sandbox
     double dest_x = Common.getRandomGenerator().nextDouble(Common.getSandBox().width);
     double dest_y = Common.getRandomGenerator().nextDouble(Common.getSandBox().height + Common.getSandBox().y);
 
+    /**
+     * calculates a vector based on the destionation and entity object
+     * then normalize it
+     * then round the values to find nearest pixel to the direction
+     * 
+     * @param Entity
+     * 
+     */
     @Override
     public Position next(Entity entity) {
 
@@ -22,6 +31,9 @@ public class GotoXY extends State {
 
     }
 
+    /**
+     * returns the name of the class
+     */
     @Override
     public String getName() {
         return this.getClass().getName();

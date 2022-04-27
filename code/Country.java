@@ -55,25 +55,25 @@ public class Country extends Entity {
         g.setColor(Color.BLUE);
         g.drawString("Worth : ", x,
                 y + 240);
-        g.drawString(this.worth + "", x + 150,
+        g.drawString((int) this.worth + "", x + 150,
                 y + 240);
         // draw cash value
         g.setColor(new Color(0, 100, 0));
         g.drawString("Cash : ", x,
                 y + 280);
-        g.drawString(this.cash + "", x + 150,
+        g.drawString((int) this.cash + "", x + 150,
                 y + 280);
         // draw gold value
         g.setColor(Color.YELLOW);
         g.drawString("Gold : ", x,
                 y + 320);
-        g.drawString(this.gold + "", x + 150,
+        g.drawString((int) this.gold + "", x + 150,
                 y + 320);
         // draw happiness value
         g.setColor(new Color(180, 0, 0));
         g.drawString("Happiness : ", x,
                 y + 360);
-        g.drawString(this.cash + "", x + 150,
+        g.drawString((int) this.happiness + "", x + 150,
                 y + 360);
 
     }
@@ -125,14 +125,6 @@ public class Country extends Entity {
         return this.name;
     }
 
-    public void setCash(double amount) {
-        this.cash = amount;
-    }
-
-    public void setGold(double amount) {
-        this.gold = amount;
-    }
-
     public void gainGold(double amount) {
         this.gold += amount;
     }
@@ -145,7 +137,16 @@ public class Country extends Entity {
         this.cash += amount;
     }
 
-    public void loseCash(int amount) {
-        this.cash -= amount;
+    public void loseCash(double d) {
+        this.cash -= d;
     }
+
+    public void gainHappiness(double d) {
+        this.happiness += d;
+    }
+
+    public void loseHappiness(double d) {
+        this.happiness -= d;
+    }
+
 }

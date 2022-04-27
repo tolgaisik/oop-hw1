@@ -7,6 +7,9 @@ public class SellGoldOrder extends GoldOrder {
         super(x, y, country);
     }
 
+    /**
+     * basic draw
+     */
     @Override
     public void draw(Graphics2D g) {
         g.setColor(new Color(180, 0, 0));
@@ -16,6 +19,7 @@ public class SellGoldOrder extends GoldOrder {
 
     }
 
+    // move the order
     @Override
     public void step() {
         int x_vec = (int) (speed * path.getX());
@@ -24,9 +28,29 @@ public class SellGoldOrder extends GoldOrder {
         position.setY(position.getY() + y_vec);
     }
 
+    /**
+     * called when order is out of the horizon
+     * update country
+     * then dispose itself
+     */
     @Override
     void out() {
         country.loseGold(this.amount);
         country.gainCash(this.amount * Common.getGoldPrice().getCurrentPrice());
+        dispose();
     }
+
+    /**
+     * this function is called if order is inside of a corporation object
+     * 
+     * @param corp which the order inside
+     */
+    @Override
+    public void inside(Corporation corp) {
+        corp.gainCash(amount * Common.getGoldPrice().getCurrentPrice());
+        country.loseGold(amount);
+        country.loseHappiness(amount * 0.1);
+        dispose();
+    }
+
 }

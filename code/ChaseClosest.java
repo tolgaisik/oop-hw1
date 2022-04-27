@@ -2,10 +2,18 @@ import java.util.List;
 
 /**
  * @classdesc this is a class that implements the State
- *            interface to chase the closest order.
+ *            interface to chase the closest gold order.
  */
 public class ChaseClosest extends State {
+    int speed = Common.getRandomGenerator().nextInt(3) + 2;
 
+    /**
+     * calculates the next position of the entity
+     * finds the closest gold order and moves towards the closest gold order
+     * 
+     * @param Entity
+     * 
+     */
     @Override
     public Position next(Entity entity) {
         double min = Double.MAX_VALUE;
@@ -23,17 +31,25 @@ public class ChaseClosest extends State {
         if (index == -1)
             return entity.getPosition();
         Order order = orders.get(index);
-        Position target = order.getPosition();
-        Position pos = entity.getPosition();
-        Position directionVector = new Position(target.getX() - pos.getX(), target.getY() - pos.getY());
-        double length = Math.sqrt(
-                directionVector.getX() * directionVector.getX() + directionVector.getY() * directionVector.getY());
-        directionVector.setX(directionVector.getX() / length);
-        directionVector.setY(directionVector.getY() / length);
+        if (order instanceof GoldOrder) {
+            Position target = order.getPosition();
+            Position pos = entity.getPosition();
+            Position directionVector = new Position(target.getX() - pos.getX(), target.getY() - pos.getY());
+            double length = Math.sqrt(
+                    directionVector.getX() * directionVector.getX() + directionVector.getY() * directionVector.getY());
+            directionVector.setX(speed * directionVector.getX() / length + pos.getX());
+            directionVector.setY(speed * directionVector.getY() / length + pos.getY());
+            // now we have a normalized direction vector
+            return directionVector;
+        }
         return entity.getPosition();
-
     }
 
+    /**
+     * returns the name of the class
+     * 
+     * @return String
+     */
     @Override
     public String getName() {
         return this.getClass().getName();

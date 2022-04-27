@@ -24,12 +24,14 @@ public class Display extends JPanel {
         g.drawLine(Common.getSecondVerticalLineX(), 0, Common.getSecondVerticalLineX(), Common.getHorizontalLineY());
         g.drawLine(0, Common.getHorizontalLineY(), Common.getWindowWidth(), Common.getHorizontalLineY());
 
+        /**
+         * TODO: additional entities drawed below
+         */
+        // draw countries
         Common.getCountries().forEach(country -> country.draw(g));
+        // draw corporations
         Common.getCorporations().forEach(corporation -> corporation.draw(g));
-        g.setColor(Color.RED);
-        g.drawRect((int) Common.getSandBox().getX(), (int) Common.getSandBox().getY(),
-                (int) Common.getSandBox().getWidth(), (int) Common.getSandBox().getHeight());
-
+        // draw orders
         Common.getOrders().forEach(order -> order.draw(g));
     }
 }

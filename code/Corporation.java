@@ -4,8 +4,6 @@ import java.awt.Image;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -14,6 +12,7 @@ public class Corporation extends Entity {
     private String name;
     private Image image;
     private State state;
+    private int cash;
 
     public Corporation(double x, double y, String name, String initStateName) {
         super(x, y);
@@ -25,6 +24,7 @@ public class Corporation extends Entity {
             e.printStackTrace();
         }
         this.state = createState(initStateName);
+        this.cash = new Random().nextInt(1000);
     }
 
     @Override
@@ -103,9 +103,12 @@ public class Corporation extends Entity {
         return this.name;
     }
 
-    // TODO
-    // Corporation image is 100 x 100
-    // Cash RGB --> (180, 0, 0)
-    // Badge is 20 x 20
+    public void gainCash(double amount) {
+        this.cash += amount;
+    }
+
+    public void loseCash(double amount) {
+        this.cash -= amount;
+    }
 
 }

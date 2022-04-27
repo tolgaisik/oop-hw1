@@ -3,7 +3,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -71,8 +70,9 @@ public class Common {
     private static final int countryTop;
     private static final List<String> states;
     private static final List<String> orderTypes;
+    private static final Rectangle corpArea;
     static {
-
+        // TODO: ...
         // init sandbox
         // Rectangle shows the area that corporations are not allowed to leave
         sandbox = new Rectangle(0, getHorizontalLineY(), windowWidth,
@@ -115,6 +115,9 @@ public class Common {
         orderTypes = Arrays.asList("FoodOrder", "ElectronicsOrder", "BuyGoldOrder", "SellGoldOrder");
         // possible states array
         states = Arrays.asList("Shake", "Rest", "ChaseClosest", "GotoXY");
+
+        // rectangle as same size as corporation
+        corpArea = new Rectangle(0, 0, 100, 100);
     }
 
     // additional methods added below
@@ -202,16 +205,31 @@ public class Common {
     }
 
     private static void updateOrders() {
-        orders = orders.stream().filter(order -> {
+        orders.forEach(order -> {
             order.step();
-            // if order is on the horizontal line
             if (order.getPosition().getY() < getHorizontalLineY()) {
                 order.out();
-                return false;
             }
-            return true;
+        });
+        removeDisposedOrders();
+    }
 
-        }).collect(Collectors.toList());
+    /**
+     * removes orders which are disposed
+     *
+     * @return
+     */
+    private static int removeDisposedOrders() {
+        Iterator<Order> iter = orders.iterator();
+        int count = 0;
+        while (iter.hasNext()) {
+            Order order = iter.next();
+            if (order.isDisposed()) {
+                iter.remove();
+                count++;
+            }
+        }
+        return count;
     }
 
     private static void updateCountries(List<Country> countries) {
@@ -225,16 +243,15 @@ public class Common {
 
                 // create order with using the string class name
                 // luckily, the country knows nothing about what type of order it creates
-                Order order = country.createOrder(className);
 
                 // if it is an import to raise the happiness happiness should
                 // be less than 50 percent
-                if (className.equals("FoodOrder") && className.equals("ElectronicsOrder")) {
-                    if (country.happiness < 50) {
-                        orders.add(order);
-                    }
+                if ((className.equals("FoodOrder") || className.equals("ElectronicsOrder")) && country.happiness < 50) {
+                    Order order = country.createOrder(className);
+                    orders.add(order);
                 } else {
                     // gold order
+                    Order order = country.createOrder(className);
                     orders.add(order);
                 }
 
@@ -247,7 +264,7 @@ public class Common {
         // update each corporation based on the current and some random values
         corps.forEach(corp -> {
             // randomly change their states
-            if (randomGenerator.nextInt(100) == 0)
+            if (randomGenerator.nextInt(200) == 0)
                 corp.setState(corp.createState(getStateClassName()));
 
             // if corporation is outside of the sandbox then
@@ -255,10 +272,24 @@ public class Common {
             // its state is not GotoXY go to the x y which are inside sandbox
             if (!isInSandbox(corp.getPosition()) && corp.getState().getName() != "GotoXY")
                 corp.setState(corp.createState("GotoXY"));
-
+            // for each order
+            orders.forEach(order -> {
+                // if order is a gold order
+                if (order instanceof GoldOrder) {
+                    // move rectangle to position of the corporation
+                    corpArea.setLocation(corp.getPosition().getIntX(), corp.getPosition().getIntY());
+                    // then we check if the position point is in the rectangle
+                    if (corpArea.contains(order.getPosition().getX(), order.getPosition().getY())) {
+                        // intersection happened here
+                        GoldOrder goldOrder = (GoldOrder) order;
+                        goldOrder.inside(corp);
+                    }
+                }
+            });
             // update the corporation entity
             corp.step();
 
         });
     }
+
 }

@@ -7,6 +7,11 @@ public class FoodOrder extends Order {
         super(x, y, country);
     }
 
+    /**
+     * set color of the order
+     * draw oval
+     * draw amount as string
+     */
     @Override
     public void draw(Graphics2D g) {
         g.setColor(new Color(245, 222, 179));
@@ -15,6 +20,9 @@ public class FoodOrder extends Order {
         g.drawString(Integer.toString(amount), (int) position.getX() + 5, (int) position.getY() + 18);
     }
 
+    /**
+     * move the order
+     */
     @Override
     public void step() {
         int x_vec = (int) (speed * path.getX());
@@ -22,12 +30,15 @@ public class FoodOrder extends Order {
         position.setX(position.getX() + x_vec);
         position.setY(position.getY() + y_vec);
     }
-    // TODO
-    // RGB --> (245, 222, 179)
 
+    /**
+     * since this is called when order is out of horizontalLineY
+     * it updates its country and dispose itself
+     */
     @Override
     void out() {
-        // TODO Auto-generated method stub
-
+        country.loseCash(amount * Common.getFoodPrice().getCurrentPrice());
+        country.gainHappiness(amount * 0.2);
+        dispose();
     }
 }

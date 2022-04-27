@@ -27,7 +27,8 @@ public class ElectronicsOrder extends Order {
 
     @Override
     void out() {
-        // TODO Auto-generated method stub
-
+        country.loseCash(amount * Common.getElectronicsPrice().getCurrentPrice());
+        country.gainHappiness(amount * 0.4);
+        dispose();
     }
 }

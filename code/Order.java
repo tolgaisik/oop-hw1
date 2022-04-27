@@ -5,6 +5,7 @@ public abstract class Order extends Entity {
     double speed;
     Position path;
     Country country;
+    boolean disposed = false;
 
     public Order(double x, double y, Country country) {
         super(x, y);
@@ -34,6 +35,18 @@ public abstract class Order extends Entity {
      * @return none
      */
     abstract void out();
-    // TODO
-    // Order is 24 x 24
+
+    /**
+     * called when order should dissappear on the screen
+     */
+    public void dispose() {
+        disposed = true;
+    }
+
+    /**
+     * @return true if order is disposed else otherwise
+     */
+    public boolean isDisposed() {
+        return disposed;
+    }
 }

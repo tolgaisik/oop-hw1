@@ -7,6 +7,11 @@ public class BuyGoldOrder extends GoldOrder {
         super(x, y, country);
     }
 
+    /**
+     * set color of the order
+     * draw oval
+     * draw amount as string
+     */
     @Override
     public void draw(Graphics2D g) {
         g.setColor(Color.GREEN);
@@ -15,6 +20,7 @@ public class BuyGoldOrder extends GoldOrder {
         g.drawString(Integer.toString(amount), (int) position.getX() + 5, (int) position.getY() + 18);
     }
 
+    // move the order
     @Override
     public void step() {
         int x_vec = (int) (speed * path.getX());
@@ -23,9 +29,23 @@ public class BuyGoldOrder extends GoldOrder {
         position.setY(position.getY() + y_vec);
     }
 
+    /**
+     * update its country
+     * then dispose itself
+     */
     @Override
     void out() {
         country.gainGold(this.amount);
         country.loseCash((int) (this.amount * Common.getGoldPrice().getCurrentPrice()));
+        dispose();
     }
+
+    @Override
+    public void inside(Corporation corp) {
+        corp.gainCash(amount * Common.getGoldPrice().getCurrentPrice());
+        country.loseCash(amount * Common.getGoldPrice().getCurrentPrice());
+        country.loseHappiness(amount * 0.1);
+        dispose();
+    }
+
 }
