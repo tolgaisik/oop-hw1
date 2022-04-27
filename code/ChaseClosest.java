@@ -16,10 +16,18 @@ public class ChaseClosest extends State {
      */
     @Override
     public Position next(Entity entity) {
+        // this is not working as expected
+        // sometimes corporation is not chasing a gold order at all
         double min = Double.MAX_VALUE;
         Integer index = -1;
         List<Order> orders = Common.getOrders();
         int SIZE = orders.size();
+        /**
+         * get orders and find the closest by calculating the distance between them
+         * find the shortest distance then check if it is a gold order and move towards
+         * to the one
+         * 
+         */
         for (int i = 0; i < SIZE; i++) {
             Order order = orders.get(i);
             double distance = distance(order.getPosition(), entity.getPosition());
