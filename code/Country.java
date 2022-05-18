@@ -40,8 +40,8 @@ public class Country extends Entity {
 
     @Override
     public void draw(Graphics2D g) {
-        int x = (int) this.position.getX();
-        int y = (int) this.position.getY();
+        int x = this.position.getIntX();
+        int y = this.position.getIntY();
 
         if (image != null) {
             g.drawImage(image, x,
